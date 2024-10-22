@@ -1,0 +1,27 @@
+import serial
+import time
+
+# Убедитесь, что указываете правильный COM-порт (COM3, COM4 и т.д.) и скорость передачи
+bluetooth_serial = serial.Serial("COM3", 9600)  # Замените COM3 на нужный порт
+time.sleep(2)  # Ожидание, чтобы подключение установилось
+
+print("Подключение к HC-06 успешно установлено. Готово к передаче данных.")
+
+try:
+    while True:
+        # Отправляем данные на HC-06
+        message = input("Введите сообщение для отправки через Bluetooth: ")
+        bluetooth_serial.write(message.encode())  # Отправляем сообщение через Bluetooth
+        print("Сообщение отправлено!")
+
+        # Проверяем, есть ли данные, полученные через Bluetooth
+        if bluetooth_serial.in_waiting > 0:
+            received_data = bluetooth_serial.read(bluetooth_serial.in_waiting).decode()
+            print(f"Получено через Bluetooth: {received_data}")
+        
+        time.sleep(1)  # Задержка для удобства
+
+except KeyboardInterrupt:
+    print("Завершение работы.")
+finally:
+    bluetooth_serial.close()  # Закрытие порта после завершения

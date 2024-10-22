@@ -1,0 +1,34 @@
+#include <SoftwareSerial.h>
+
+// Пины для подключения HC-06
+SoftwareSerial BTSerial(10, 11);  // RX на пин 10, TX на пин 11
+
+void setup() {
+  // Настройка скорости последовательного монитора и модуля HC-06
+  Serial.begin(9600);      // Serial для связи с ПК
+  BTSerial.begin(9600);    // HC-06 работает на скорости 9600
+  
+  Serial.println("Проверка HC-06: готов к приему данных...");
+}
+
+void loop() {
+  // Проверяем, есть ли данные с HC-06
+  if (BTSerial.available()) {
+    char incomingData = BTSerial.read();  // Чтение данных с HC-06
+    Serial.print("Получено через Bluetooth: ");
+    Serial.println(incomingData);  // Отправляем на ПК полученные данные через последовательный монитор
+
+    // Отправляем обратно на HC-06
+    BTSerial.print("Эхо: ");  // Тестовое сообщение
+    BTSerial.println(incomingData);  // Отправляем полученные данные обратно
+  }
+
+  // Проверяем, отправляет ли ПК данные через последовательный монитор
+  if (Serial.available()) {
+    char pcData = Serial.read();  // Чтение данных с последовательного монитора
+    BTSerial.print("Сообщение с ПК: ");  // Отправляем на Bluetooth-модуль
+    BTSerial.println(pcData);
+    Serial.print("Сообщение отправлено на Bluetooth: ");
+    Serial.println(pcData);  // Подтверждение на ПК
+  }
+}
