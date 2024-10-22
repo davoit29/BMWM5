@@ -1,10 +1,10 @@
-import customtkinter as ctk
-import serial
-import time
+from tkinter import StringVar
 
-# Инициализация подключения к HC-06
-bluetooth_serial = serial.Serial("COM3", 9600)  # Убедитесь, что COM-порт правильный
-time.sleep(2)  # Даем время на установление соединения
+import serial
+import customtkinter as ctk
+import math
+
+bluetooth_serial  = serial.Serial("COM8", 9600, timeout = 1) #Change your port name COM... and your baudrate
 
 # Создаем главное окно
 ctk.set_appearance_mode("dark")  # Темная тема
